@@ -3,7 +3,7 @@ name: Upld2BlobStorage
 on:
   push:
     paths:                                  
-      - 'ToUpload/**'
+      - 'Main'
 
   
 jobs:
@@ -29,7 +29,7 @@ jobs:
         with:
           inlineScript: |
            az config set extension.use_dynamic_install=yes_without_prompt
-           az storage azcopy blob upload -c "containerblob" --account-name "blobpocactions" -s "ToUpload/example.json" -d "example.json" --account-key ${{secrets.STORAGEKEY}}
+           az storage azcopy blob upload -c "containerblob" --account-name "blobpocactions" -s "ghactionstest.jar" -d "ghactionstest.jar" --account-key ${{secrets.STORAGEKEY}}
           azPSVersion: "latest"
         
         
@@ -55,5 +55,5 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-           az storage fs directory create -n "diraccountkey" -f "newcontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
+           az storage fs file upload -s "ghactionstest.jar" -p "ghactionstest.jar"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
           azPSVersion: "latest"
