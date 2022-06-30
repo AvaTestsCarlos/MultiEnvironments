@@ -3,7 +3,7 @@ name: Upld2BlobStorage
 on:
   push:
     paths:                                  
-      - 'main'
+      - ".github/workflows/multienv.yml"
 
   
 jobs:
