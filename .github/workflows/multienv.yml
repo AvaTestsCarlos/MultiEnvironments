@@ -1,0 +1,59 @@
+name: Upld2BlobStorage
+
+on:
+  push:
+    paths:                                  
+      - 'ToUpload/**'
+
+  
+jobs:
+  job1:
+    name: Deploy in Blob
+    runs-on: ubuntu-latest
+    environment: 
+      name: Blob 
+    steps:
+      # checkout the repo
+      - uses: actions/checkout@v2
+
+      #LogIn to Azure with Service Principal Credentials 
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURECREDENTIALS}}
+          enable-AzPSSession: true 
+
+      #Use az cmdlets to interact with ADLS gen2
+      - name: Run Azure PowerShell script
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+           az config set extension.use_dynamic_install=yes_without_prompt
+           az storage azcopy blob upload -c "containerblob" --account-name "blobpocactions" -s "ToUpload/example.json" -d "example.json" --account-key ${{secrets.STORAGEKEY}}
+          azPSVersion: "latest"
+        
+        
+        
+  job2:
+    name: Deploy in ADLS
+    runs-on: ubuntu-latest
+    environment: 
+      name: Adls 
+    steps:
+      # checkout the repo
+      - uses: actions/checkout@v2
+
+      #LogIn to Azure with Service Principal Credentials 
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          creds: ${{secrets.AZURECREDENTIALS}}
+          enable-AzPSSession: true 
+
+      #Use az cmdlets to interact with ADLS gen2
+      - name: Run Azure PowerShell script
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+           az storage fs directory create -n "diraccountkey" -f "newcontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
+          azPSVersion: "latest"
