@@ -32,7 +32,7 @@ jobs:
              az storage fs file upload -s "ghactionstest.jar" -p "ghactionstest.jar"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
             azPSVersion: "latest"
 
-
+ 
 
   job2:
     name: Deploy in Blob
