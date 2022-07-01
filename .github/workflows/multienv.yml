@@ -7,8 +7,36 @@ on:
 
   
 jobs:
+
   job1:
+      name: Deploy in ADLS
+      runs-on: ubuntu-latest
+      environment: 
+        name: Adls 
+      steps:
+        # checkout the repo
+        - uses: actions/checkout@v2
+
+        #LogIn to Azure with Service Principal Credentials 
+        - name: Login via Az module
+          uses: azure/login@v1
+          with:
+            creds: ${{secrets.AZURECREDENTIALS}}
+            enable-AzPSSession: true 
+
+        #Use az cmdlets to interact with ADLS gen2
+        - name: Run Azure PowerShell script
+          uses: azure/powershell@v1
+          with:
+            inlineScript: |
+             az storage fs file upload -s "ghactionstest.jar" -p "ghactionstest.jar"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
+            azPSVersion: "latest"
+
+
+
+  job2:
     name: Deploy in Blob
+    needs: job1
     runs-on: ubuntu-latest
     environment: 
       name: Blob 
@@ -34,26 +62,4 @@ jobs:
         
         
         
-  job2:
-    name: Deploy in ADLS
-    runs-on: ubuntu-latest
-    environment: 
-      name: Adls 
-    steps:
-      # checkout the repo
-      - uses: actions/checkout@v2
 
-      #LogIn to Azure with Service Principal Credentials 
-      - name: Login via Az module
-        uses: azure/login@v1
-        with:
-          creds: ${{secrets.AZURECREDENTIALS}}
-          enable-AzPSSession: true 
-
-      #Use az cmdlets to interact with ADLS gen2
-      - name: Run Azure PowerShell script
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-           az storage fs file upload -s "ghactionstest.jar" -p "ghactionstest.jar"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
-          azPSVersion: "latest"
