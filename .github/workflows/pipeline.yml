@@ -19,10 +19,10 @@ jobs:
         
         
         #JSON file to validate check
-      - uses: Zingabopp/JsonValidate-Action@v1
-        with:
-          json-schema: JSONValidation/schema.json
-          json-file: JSONValidation/test.json
+        - uses: Zingabopp/JsonValidate-Action@v1
+          with:
+            json-schema: JSONValidation/schema.json
+            json-file: JSONValidation/test.json
           
         #If validation NOT passed, stops******************************************
         #Else, upload to storage ADLS*********************************************
