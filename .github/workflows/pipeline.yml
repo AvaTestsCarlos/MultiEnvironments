@@ -3,7 +3,7 @@ name: Upld2BlobStorage
 on:
   push:
     paths:                                  
-      - ".github/workflows/pipeline.yml"
+      - "JSONValidation/test.json"    
 
   
 jobs:
