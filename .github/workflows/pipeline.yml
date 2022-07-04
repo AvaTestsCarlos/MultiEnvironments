@@ -39,7 +39,7 @@ jobs:
           uses: azure/powershell@v1
           with:
             inlineScript: |
-             az storage fs file upload -s "ghactionstest.jar" -p "ghactionstest.jar"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
+             az storage fs file upload -s "JSONValidation/test.json" -p "test.json"  -f "carloscontainer" --account-name "adlspocactions" --account-key ${{secrets.STORAGEKEY}}
             azPSVersion: "latest"
 
  
